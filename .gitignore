@@ -1,0 +1,19 @@
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Local agent/editor state
+.claude/
+.claudian/
+
+# Obsidian local workspace and downloaded community plugins
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/community-plugins.json
+.obsidian/plugins/
+
+# Generated caches and temporary files
+.trash/
+.obsidian/cache/
+*.tmp
+*.temp
