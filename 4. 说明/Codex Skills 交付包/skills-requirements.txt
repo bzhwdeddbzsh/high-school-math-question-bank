@@ -1,0 +1,31 @@
+# Codex skills requirements for this vault
+# Generated from the current working machine on 2026-07-15.
+#
+# Usage on the target Mac:
+#   cd "4. 说明/Codex Skills 交付包"
+#   ./install-codex-skills.sh
+#
+# These are vendored local copies, so installation does not require GitHub.
+# The installer copies each directory into:
+#   ${CODEX_HOME:-$HOME/.codex}/skills/<skill-name>
+
+vendor/skills/hatch-pet
+vendor/skills/defuddle
+vendor/skills/find-skills
+vendor/skills/json-canvas
+vendor/skills/obsidian-bases
+vendor/skills/obsidian-cli
+vendor/skills/obsidian-markdown
+
+# Present in this Codex environment but not vendored here:
+# - System skills normally provided by Codex itself:
+#   imagegen, openai-docs, plugin-creator, skill-creator, skill-installer
+# - Desktop/plugin skills tied to installed Codex plugins/connectors:
+#   browser:control-in-app-browser, chrome:control-chrome, computer-use,
+#   documents, spreadsheets, pdf, presentations, template-creator,
+#   sites, visualize, github, public-equity-investing, openai-templates, etc.
+#
+# Notes:
+# - hatch-pet depends on the system imagegen skill for normal image generation.
+# - defuddle requires the external CLI when used: npm install -g defuddle
+# - obsidian-cli requires an Obsidian CLI setup and a running Obsidian instance when used.
