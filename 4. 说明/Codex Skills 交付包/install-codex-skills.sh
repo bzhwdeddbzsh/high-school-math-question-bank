@@ -3,29 +3,25 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REQ_FILE="$SCRIPT_DIR/skills-requirements.txt"
-DEST_ROOT="${CODEX_HOME:-$HOME/.codex}/skills"
-REPLACE=0
 
 usage() {
   cat <<'EOF'
-Install the vendored Codex skills for this vault.
+Install the Codex skills for this vault.
 
 Usage:
-  ./install-codex-skills.sh [--replace]
-
-Options:
-  --replace   Back up any existing skill directory, then install this copy.
+  ./install-codex-skills.sh
 
 Destination:
   ${CODEX_HOME:-$HOME/.codex}/skills
+
+Requirements:
+  Node.js/npm, because packages are installed with:
+    npx -y skills add <source> -g -y
 EOF
 }
 
 for arg in "$@"; do
   case "$arg" in
-    --replace)
-      REPLACE=1
-      ;;
     -h|--help)
       usage
       exit 0
@@ -43,52 +39,42 @@ if [[ ! -f "$REQ_FILE" ]]; then
   exit 1
 fi
 
-mkdir -p "$DEST_ROOT"
+if ! command -v npx >/dev/null 2>&1; then
+  cat >&2 <<'EOF'
+npx was not found.
+
+Install Node.js/npm first, then rerun this script.
+See:
+  Intel Mac 环境准备.md
+EOF
+  exit 1
+fi
 
 installed=0
-skipped=0
-missing=0
-timestamp="$(date +%Y%m%d-%H%M%S)"
+failed=0
 
 while IFS= read -r raw_line || [[ -n "$raw_line" ]]; do
   line="${raw_line%%#*}"
   line="$(printf '%s' "$line" | sed 's/^[[:space:]]*//; s/[[:space:]]*$//')"
 
   [[ -z "$line" ]] && continue
-  [[ "$line" == vendor/skills/* ]] || continue
 
-  skill_name="${line##*/}"
-  src="$SCRIPT_DIR/$line"
-  dest="$DEST_ROOT/$skill_name"
-
-  if [[ ! -d "$src" ]]; then
-    echo "Missing vendored skill: $line" >&2
-    missing=$((missing + 1))
-    continue
+  echo "Installing Skill Hub package: $line"
+  if npx -y skills add "$line" -g -y; then
+    installed=$((installed + 1))
+  else
+    echo "Failed to install Skill Hub package: $line" >&2
+    failed=$((failed + 1))
   fi
-
-  if [[ -e "$dest" ]]; then
-    if [[ "$REPLACE" -eq 1 ]]; then
-      backup="$dest.backup-$timestamp"
-      mv "$dest" "$backup"
-      echo "Backed up existing $skill_name to $backup"
-    else
-      echo "Skipped existing skill: $skill_name"
-      skipped=$((skipped + 1))
-      continue
-    fi
-  fi
-
-  cp -R "$src" "$dest"
-  echo "Installed skill: $skill_name"
-  installed=$((installed + 1))
 done < "$REQ_FILE"
 
 echo
-echo "Done. Installed: $installed, skipped: $skipped, missing: $missing"
-echo "Destination: $DEST_ROOT"
+echo "Done."
+echo "Skill Hub packages installed: $installed"
+echo "Failed: $failed"
+echo "Destination: ${CODEX_HOME:-$HOME/.codex}/skills"
 echo "Restart Codex CLI after installation so it reloads skills."
 
-if [[ "$missing" -gt 0 ]]; then
+if [[ "$failed" -gt 0 ]]; then
   exit 1
 fi

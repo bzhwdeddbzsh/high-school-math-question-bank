@@ -1,0 +1,10 @@
+# npm global requirements for this vault's Codex skills
+#
+# Install with:
+#   ./install-npm-deps.sh
+#
+# Or manually:
+#   npm install -g defuddle docx
+
+defuddle
+docx

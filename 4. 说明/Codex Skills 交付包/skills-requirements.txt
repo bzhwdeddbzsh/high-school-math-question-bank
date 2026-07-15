@@ -5,17 +5,18 @@
 #   cd "4. 说明/Codex Skills 交付包"
 #   ./install-codex-skills.sh
 #
-# These are vendored local copies, so installation does not require GitHub.
-# The installer copies each directory into:
-#   ${CODEX_HOME:-$HOME/.codex}/skills/<skill-name>
+# Lines like owner/repo@skill are Skill Hub packages. They require Node.js/npm
+# because the installer runs:
+#   npx -y skills add <owner/repo@skill> -g -y
 
-vendor/skills/hatch-pet
-vendor/skills/defuddle
-vendor/skills/find-skills
-vendor/skills/json-canvas
-vendor/skills/obsidian-bases
-vendor/skills/obsidian-cli
-vendor/skills/obsidian-markdown
+anthropics/skills@pdf
+anthropics/skills@docx
+kepano/obsidian-skills@defuddle
+kepano/obsidian-skills@json-canvas
+kepano/obsidian-skills@obsidian-bases
+kepano/obsidian-skills@obsidian-cli
+kepano/obsidian-skills@obsidian-markdown
+vercel-labs/skills@find-skills
 
 # Present in this Codex environment but not vendored here:
 # - System skills normally provided by Codex itself:
@@ -26,6 +27,13 @@ vendor/skills/obsidian-markdown
 #   sites, visualize, github, public-equity-investing, openai-templates, etc.
 #
 # Notes:
-# - hatch-pet depends on the system imagegen skill for normal image generation.
-# - defuddle requires the external CLI when used: npm install -g defuddle
+# - anthropics/skills@pdf supports PDF text extraction, image extraction,
+#   rendering/OCR workflows, and general PDF manipulation.
+# - anthropics/skills@docx supports reading, creating, and editing Word .docx
+#   files, including existing-template workflows.
+# - kepano/obsidian-skills packages are installed from Skill Hub instead of
+#   being vendored in this repo.
+# - vercel-labs/skills@find-skills supports discovering additional skills.
+# - defuddle requires the external CLI when used. Install npm packages with:
+#   ./install-npm-deps.sh
 # - obsidian-cli requires an Obsidian CLI setup and a running Obsidian instance when used.
