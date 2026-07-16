@@ -24,13 +24,28 @@ npm --version
 
 适合后续还要安装 `pandoc`、`tesseract` 等命令行工具的机器。
 
-先安装 Homebrew：
+先使用清华大学开源软件镜像站安装 Homebrew：
 
 ```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"
+export HOMEBREW_API_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/api"
+export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"
+
+/bin/bash -c "$(curl -fsSL https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/install.git/plain/install.sh)"
 ```
 
-Intel Mac 默认 Homebrew 路径通常是 `/usr/local`。安装完成后，如果终端提示需要配置 shell 环境，按提示执行。
+Intel Mac 默认 Homebrew 路径通常是 `/usr/local`。安装完成后，把清华源配置写入 shell 配置：
+
+```bash
+cat >> ~/.zprofile <<'EOF'
+eval "$(/usr/local/bin/brew shellenv)"
+export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"
+export HOMEBREW_API_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/api"
+export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"
+EOF
+
+source ~/.zprofile
+```
 
 然后安装 Node.js：
 
